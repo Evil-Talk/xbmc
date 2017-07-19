@@ -18,6 +18,8 @@
  *
  */
 
+#include <Python.h>
+
 #include "HTTPPythonWsgiInvoker.h"
 
 #include <utility>
@@ -30,7 +32,7 @@
 #include "URL.h"
 #include "utils/URIUtils.h"
 
-#define MODULE      "xbmc"
+#define MODULE "xbmc"
 
 #define RUNSCRIPT_PREAMBLE \
   "" \
@@ -52,14 +54,14 @@
 
 #define RUNSCRIPT_SETUPTOOLS_HACK \
   "" \
-  "import imp,sys\n" \
+  "import types,sys\n" \
   "pkg_resources_code = \\\n" \
   "\"\"\"\n" \
   "def resource_filename(__name__,__path__):\n" \
   "  return __path__\n" \
   "\"\"\"\n" \
-  "pkg_resources = imp.new_module('pkg_resources')\n" \
-  "exec pkg_resources_code in pkg_resources.__dict__\n" \
+  "pkg_resources = types.ModuleType('pkg_resources')\n" \
+  "exec(pkg_resources_code, pkg_resources.__dict__)\n" \
   "sys.modules['pkg_resources'] = pkg_resources\n" \
   ""
 
@@ -76,9 +78,9 @@
 #endif
 
 namespace PythonBindings {
-  void initModule_xbmc(void);
-  void initModule_xbmcaddon(void);
-  void initModule_xbmcwsgi(void);
+  PyObject* PyInit_Module_xbmc(void);
+  PyObject* PyInit_Module_xbmcaddon(void);
+  PyObject* PyInit_Module_xbmcwsgi(void);
 }
 
 using namespace PythonBindings;
@@ -91,9 +93,9 @@ typedef struct
 
 static PythonModule PythonModules[] =
 {
-  { "xbmc",           initModule_xbmc },
-  { "xbmcaddon",      initModule_xbmcaddon  },
-  { "xbmcwsgi",       initModule_xbmcwsgi }
+  { "xbmc",           PyInit_Module_xbmc },
+  { "xbmcaddon",      PyInit_Module_xbmcaddon },
+  { "xbmcwsgi",       PyInit_Module_xbmcwsgi }
 };
 
 #define PythonModulesSize sizeof(PythonModules) / sizeof(PythonModule)
@@ -101,7 +103,11 @@ static PythonModule PythonModules[] =
 CHTTPPythonWsgiInvoker::CHTTPPythonWsgiInvoker(ILanguageInvocationHandler* invocationHandler, HTTPPythonRequest* request)
   : CHTTPPythonInvoker(invocationHandler, request),
     m_wsgiResponse(NULL)
-{ }
+{
+    PyImport_AppendInittab("xbmc", PyInit_Module_xbmc);
+    PyImport_AppendInittab("xbmcaddon", PyInit_Module_xbmcaddon);
+    PyImport_AppendInittab("xbmcwsgi", PyInit_Module_xbmcwsgi);
+}
 
 CHTTPPythonWsgiInvoker::~CHTTPPythonWsgiInvoker()
 {

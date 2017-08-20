@@ -4,13 +4,13 @@ DEPS= ../../Makefile.include Makefile
 
 # lib name, version
 LIBNAME=Python
-VERSION=2.7.14
+VERSION=3.6.4
 SOURCE=$(LIBNAME)-$(VERSION)
 ARCHIVE=$(SOURCE).tar.xz
 CWD=$(shell pwd)
 HOSTPYTHONDIR=$(CWD)/$(PLATFORM)/hostpython
 
-CONFIGURE=./configure --prefix=$(NATIVEPREFIX) --disable-shared --disable-toolbox-glue --disable-framework
+CONFIGURE=./configure --prefix=$(NATIVEPREFIX) --disable-shared --disable-framework --without-pymalloc
 
 LIBDYLIB=$(PLATFORM)/python
 ifeq ($(NATIVE_OS), osx)

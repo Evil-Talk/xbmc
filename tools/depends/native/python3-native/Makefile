@@ -11,6 +11,10 @@ CWD=$(shell pwd)
 HOSTPYTHONDIR=$(CWD)/$(PLATFORM)/hostpython
 
 CONFIGURE=./configure --prefix=$(NATIVEPREFIX) --disable-shared --disable-framework --without-pymalloc
+ifeq ($(TARGET_PLATFORM),wayland)
+  CONFIGURE += --with-system-expat
+endif
+
 
 LIBDYLIB=$(PLATFORM)/python
 ifeq ($(NATIVE_OS), osx)

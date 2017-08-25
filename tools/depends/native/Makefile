@@ -22,6 +22,7 @@ endif
 
 ifeq ($(TARGET_PLATFORM),wayland)
   NATIVE += expat-native wayland-scanner-native waylandpp-scanner-native
+  EXPAT = expat-native
 endif
 
 ifeq ($(TARGET_PLATFORM),raspberry-pi)
@@ -42,7 +43,7 @@ swig-native: pcre-native
 distribute-native: python3-native
 distutilscross-native: python3-native distribute-native
 tar-native: xz-native automake-native
-python3-native: zlib-native
+python3-native: zlib-native $(EXPAT)
 wayland-scanner-native: expat-native
 waylandpp-scanner-native: cmake-native
 

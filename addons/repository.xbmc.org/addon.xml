@@ -7,10 +7,10 @@
     <import addon="xbmc.addon" version="12.0.0"/>
   </requires>
 	<extension point="xbmc.addon.repository">
-		<info>http://mirrors.kodi.tv/addons/leia/addons.xml.gz</info>
-		<checksum verify="sha256">http://mirrors.kodi.tv/addons/leia/addons.xml.gz?sha256</checksum>
-		<datadir>https://mirrors.kodi.tv/addons/leia</datadir>
-		<artdir>http://mirrors.kodi.tv/addons/leia</artdir>
+		<info>http://mirrors.kodi.tv/addons/migration/addons.xml.gz</info>
+		<checksum verify="sha256">http://mirrors.kodi.tv/addons/migration/addons.xml.gz?sha256</checksum>
+		<datadir>https://mirrors.kodi.tv/addons/migration</datadir>
+		<artdir>http://mirrors.kodi.tv/addons/migration</artdir>
 		<hashes>sha256</hashes>
 	</extension>
 	<extension point="xbmc.addon.metadata">
